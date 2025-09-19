@@ -28,6 +28,8 @@ function App() {
     impression: ''
   })
 
+  const [error, setError] = useState(null)
+
   const splitReport = (reportText) => {
     if (!reportText) return { findings: '', impression: '' };
     
@@ -56,6 +58,7 @@ function App() {
 
   const handleChecking = (e) => {
     e.preventDefault();
+    setError(null)
     setStatusResult(prev => ({ ...prev, loading: true }))
     
     const formData = new FormData();
@@ -67,6 +70,11 @@ function App() {
       }
     })
     .then(res => {
+      if (!res.data.is_chest_xray) {
+        setError(res.data)
+        return;
+      }
+
       setStatusResult(prev => ({...prev, result: res.data, submitted: true}))
       
       // Parse the report sections when we get the result
@@ -202,6 +210,7 @@ function App() {
             <div>
               <h2 className='capitalize text-blue-700 text-xl font-bold '>upload gambar x-ray paru - paru</h2>
               <p className='capitalize'>pilih file untuk memulai analisis AI</p>
+              {error && <span className='text-red-600'>{error.message}</span>}
             </div>
             
             <div className={`border-dashed border-2 border-blue-100 hover:border-blue-700 transition flex flex-col justify-center w-full items-center rounded-2xl overflow-hidden ${!data.img && 'h-80'}`}>

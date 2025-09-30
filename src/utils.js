@@ -38,3 +38,30 @@ export const CLASSES = [
   'Pneumothorax',
   'Normal',
 ]
+
+export const CURRENT_PROJECT = [
+  {
+    name: 'Deteksi 5 Penyakit Paru - Paru',
+    desc: 'Deteksi dini penyakit paru-paru kini lebih mudah dengan AI cerdas. Unggah data medis Anda, sistem langsung menganalisis secara cepat dan akurat. Bantu menjaga kesehatan paru-paru dengan teknologi modern yang terpercaya.',
+    techno: [
+      'React JS',
+      'Python',
+      'Vision Transformers',
+      'Torch'
+    ],
+    img: '/projectImg/project2.png',
+    url: 'chest-classify'
+  },
+  {
+    name: 'Deteksi 5 Penyakit Otak',
+    desc: 'Deteksi penyakit otak lebih cepat dengan teknologi AI cerdas. Cukup unggah data medis, sistem langsung menganalisis secara instan. Dapatkan hasil akurat untuk mendukung kesehatan otak Anda.',
+    techno: [
+      'React JS',
+      'Python',
+      'Vision Transformers',
+      'Torch'
+    ],
+    img: '/projectImg/project3.png',
+    url: 'brain-classify'
+  }
+]

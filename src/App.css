@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.home-bg {
+    background: linear-gradient(to bottom, #24375B 20%, #0D1421 40%);
+}
+
 .img-box:hover {
     box-shadow: inset 0 0 20px var(--color-blue-500);
 }

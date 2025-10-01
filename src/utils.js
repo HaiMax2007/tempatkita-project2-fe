@@ -50,7 +50,8 @@ export const CURRENT_PROJECT = [
       'Torch'
     ],
     img: '/projectImg/project2.png',
-    url: 'chest-classify'
+    url: 'chest-classify',
+    clr: '#9271FF'
   },
   {
     name: 'Deteksi 5 Penyakit Otak',
@@ -62,6 +63,7 @@ export const CURRENT_PROJECT = [
       'Torch'
     ],
     img: '/projectImg/project3.png',
-    url: 'brain-classify'
+    url: 'brain-classify',
+    clr: '#F371FF'
   }
 ]

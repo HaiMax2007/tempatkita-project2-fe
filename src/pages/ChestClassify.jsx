@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { CLASSES } from '../utils'
+import { CLASSES5 } from '../utils'
 
 function ChestClassify() {
   const [data, setData] = useState({
@@ -112,7 +112,7 @@ function ChestClassify() {
         <div className="space-y-0.5">
           <h1 className='text-3xl text-blue-700 capitalize font-semibold text-center'>AI identifikasi <span className='font-bold text-5xl'>5</span> penyakit paru paru</h1>
           <div className='flex gap-8 justify-center border-[2px] border-blue-500 px-5'>
-            {CLASSES.map((c, index) => <span key={index}>{c}</span>)}
+            {CLASSES5.map((c, index) => <span key={index}>{c}</span>)}
           </div>
         </div>
         <p className='text-center max-w-2xl'>Upload gambar X-ray untuk analisis menggunakan kecerdasan buatan yang canggih dan dapatkan hasil diagnosis dalam hitungan detik</p>

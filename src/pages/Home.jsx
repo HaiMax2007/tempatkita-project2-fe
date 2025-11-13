@@ -17,7 +17,7 @@ const Home = () => {
                 background: p.clr
               }}></div>
               <img src={p.img} alt={p.name} className='rounded-xl w-full h-[200px] object-cover' />
-              <div className="flex flex-col justify-between gap-10">
+              <div className="h-full flex flex-col justify-between gap-8">
                 <div className="space-y-2">
                   <h2 className='font-semibold text-xl'>{p.name}</h2>
                   <p className='text-sm text-white/40 max-w-[400px]'>{p.desc}</p>

@@ -31,12 +31,18 @@ export const BRAIN = [
   }
 ]
 
-export const CLASSES = [
+export const CLASSES5 = [
   'Covid-19',
   'Pneumonia',
   'Atercelesis',
   'Pneumothorax',
   'Normal',
+]
+
+export const CLASSES3 = [
+  'Covid-19',
+  'Normal',
+  'Pneumothorax',
 ]
 
 export const CURRENT_PROJECT = [
@@ -65,5 +71,18 @@ export const CURRENT_PROJECT = [
     img: '/projectImg/project3.png',
     url: 'brain-classify',
     clr: '#F371FF'
+  },
+  {
+    name: 'Deteksi 4 penyakit Otak dan Paru - Paru',
+    desc: 'haha',
+    techno: [
+      'React JS',
+      'Python',
+      'Vision Transformers',
+      'Torch'
+    ],
+    img: '/projectImg/project4.png',
+    url: 'chest-brain',
+    clr: '#71ECFF'
   }
 ]

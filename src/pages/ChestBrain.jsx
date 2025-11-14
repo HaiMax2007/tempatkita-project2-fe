@@ -24,6 +24,26 @@ const features = [
     }
 ]
 
+const diseaseLevels = [
+    {
+        bg: 'bg-[#FF0E1233]',
+        type: 'high risk',
+        color: '#FF0E12'
+    },
+    {
+        bg: 'bg-[#FFFB0033]',
+        type: 'medium risk',
+        color: '#FF7700'
+        
+    },
+    {
+        bg: 'bg-[#0EFF1A33]',
+        type: 'low risk',
+        color: '#0EFF1A'
+
+    },
+]
+
 const ChestBrain = () => {
     const [data, setData] = useState({
         img: null,
@@ -86,22 +106,24 @@ const ChestBrain = () => {
         }
         })
         .then(res => {
-        if (!res.data.is_chest_xray) {
-            setError(res.data)
-            return;
-        }
+            if (res.data.status == 'error') {
+                setError(res.data)
+                return;
+            }
 
-        setStatusResult(prev => ({...prev, result: res.data, submitted: true}))
-        
-        // Parse the report sections when we get the result
-        if (res.data.report) {
-            const sections = splitReport(res.data.report);
-            setReportSections(sections);
-        }
+            setStatusResult(prev => ({...prev, result: res.data, submitted: true}))
+            
+            // Parse the report sections when we get the result
+            if (res.data.report) {
+                const sections = splitReport(res.data.report);
+                setReportSections(sections);
+            }
         })
-        .catch(e => console.log(e))
+        .catch(e => {
+            console.log(e)
+        })
         .finally(() => {
-        setStatusResult(prev => ({ ...prev, loading: false }))
+            setStatusResult(prev => ({ ...prev, loading: false }))
         })
     }
 
@@ -121,9 +143,12 @@ const ChestBrain = () => {
         setReportSections({findings: '', impression: ''})
     }
 
+    console.log(error);
+    
+
   return (
     <div className='min-h-screen pb-20'>
-        <div className="bg-[#234C6A] py-4 px-32 text-white sticky top-0 z-50">
+        <div className="bg-[#234C6A] h-[80px] flex flex-col justify-center px-32 text-white sticky top-0 z-50">
             <h1 className='font-bold text-3xl'>MediScan AI</h1>
             <span className='text-white/60'>Powered by Vision Transformer</span>
         </div>
@@ -138,13 +163,19 @@ const ChestBrain = () => {
                         data.tempPath ? (
                             <>
                                 <img className='absolute top-1/2 left-1/2 -translate-1/2 h-full w-full object-cover' src={data.tempPath} alt={data.img?.name} />
-                                <button onClick={handleDeleteImage} type='button' className='absolute cursor-pointer top-5 right-5'>
-                                    <img className='w-8 h-8' src="/x-btn.png" alt="delete image" />
-                                </button>
-                                <div className='absolute bottom-5 left-5 bg-black flex gap-2 items-center px-4 py-1 rounded-2xl'>
-                                    <div className='w-3 h-3 bg-[#00FF0D] rounded-full animate-pulse'></div>
-                                    <span className='text-[#00FF0D]'>Image Ready</span>
-                                </div>
+                                {
+                                    !statusResult.loading && (
+                                        <>
+                                            <button onClick={handleDeleteImage} type='button' className='absolute cursor-pointer top-5 right-5'>
+                                                <img className='w-8 h-8' src="/x-btn.png" alt="delete image" />
+                                            </button>
+                                            <div className='absolute bottom-5 left-5 bg-black flex gap-2 items-center px-4 py-1 rounded-2xl'>
+                                                <div className='w-3 h-3 bg-[#00FF0D] rounded-full animate-pulse'></div>
+                                                <span className='text-[#00FF0D]'>Image Ready</span>
+                                            </div>
+                                        </>
+                                    )
+                                }
                             </>
                         ) : (
                             <>
@@ -164,17 +195,101 @@ const ChestBrain = () => {
                 </div>  
                 {
                     data.tempPath && (
-                        <button className='w-full mt-5 flex justify-center gap-3 p-2 items-center cursor-pointer bg-[#005EFF] hover:bg-[#024ed0] transition-all rounded-lg' type='submit'>
-                            <img className='w-6 h-6' src="/lightning.png" alt="thunder" />
-                            <span className='text-white text-lg'>Start AI Analysis</span>
+                        <button disabled={statusResult.loading ? true : false} className='w-full mt-5 flex justify-center gap-3 p-2 items-center cursor-pointer bg-[#005EFF] hover:bg-[#024ed0] transition-all rounded-lg' type='submit'>
+                            {
+                                statusResult.loading ? (
+                                    <>
+                                        <img className='w-6 h-6 animate-spin' src="/loading.png" alt="thunder" />
+                                        <span className='text-white text-lg'>Analyzing . . .</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <img className='w-6 h-6' src="/lightning.png" alt="thunder" />
+                                        <span className='text-white text-lg'>Start AI Analysis</span>
+                                    </>
+                                )
+                            }
                         </button>
                     )
                 }
             </form>
-            <div className="row-span-3 shadow-custom flex flex-col gap-3 justify-center items-center p-5 rounded-xl">
-                <img className='w-40 h-40' src="/layout.png" alt="Layout" />
-                <h2 className='text-lg font-semibold max-w-[500px] text-center'>Upload an X-ray image to get instant AI-powered medical insights and recommendations</h2>
-            </div>
+            {
+                statusResult.submitted ? (
+                    <div className="h-fit row-span-3 flex flex-col gap-8 rounded-xl">
+                        <div className='border-[#005EFF] flex gap-5 shadow-custom p-5 rounded-xl'>
+                            <img className='w-18 h-18' src="/lungs.png" alt="Lungs" />
+                            <div className="">
+                                <h2 className='capitalize font-bold text-2xl'>Scan type detected</h2>
+                                <span className='font-semibold text-xl capitalize'>{statusResult.result?.xray_image} CT Scan</span>
+                            </div>
+                        </div>
+                        <div className='p-5 shadow-custom rounded-xl'>
+                            <div className="flex gap-3 items-center">
+                                <img className='w-10 h-10' src="/airesult.png" alt="AI result" />
+                                <h2 className='font-bold text-xl'>AI Detection Result</h2>
+                            </div>
+                            <div className="mt-8 space-y-5">
+                                {
+                                    statusResult.result?.classification.map((c, id) => (
+                                        <div className={`${diseaseLevels[id].bg} p-5 rounded-xl`}>
+                                            <h3 className='font-semibold text-lg capitalize'>{c.condition}</h3>
+                                            <div className="mt-8 flex items-center justify-between">
+                                                <span className='px-5 py-1 capitalize text-white font-semibold rounded-full' style={{
+                                                    backgroundColor: diseaseLevels[id].color
+                                                }}>{diseaseLevels[id].type}</span>
+                                                <span className='text-lg'>Confidence <span className='font-semibold'>{c.confidence}%</span></span>
+                                            </div>
+                                            <div className="mt-3 relative h-2 w-full bg-black/30 rounded-full">
+                                                <div style={{
+                                                    backgroundColor: diseaseLevels[id].color,
+                                                    width: `${c.confidence}%`
+                                                }} className="absolute h-full top-1/2 left-1/2 -translate-1/2 rounded-full"></div>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                        <div className='bg-[#0d00ff1e] shadow-custom p-5 space-y-3 rounded-xl'>
+                            <div className="flex items-center gap-3">
+                                <img className='w-6 h-6' src="/info.png" alt="Information" />
+                                <h2 className='capitalize font-semibold text-[#FF7700]'>findings</h2>
+                            </div>
+                            <p className='text-[#009DFF]'>{reportSections.findings}</p>
+                        </div>
+                        <div className='bg-[#ff00042e] shadow-custom p-5 space-y-3 rounded-xl'>
+                            <div className="flex items-center gap-3">
+                                <img className='w-6 h-6' src="/info.png" alt="Information" />
+                                <h2 className='capitalize font-semibold text-[#FF7700]'>impression</h2>
+                            </div>
+                            <ul className="list-disc pl-8">
+                                {reportSections.impression && reportSections.impression.split('\n')
+                                    .filter(line => line.trim().startsWith('*'))
+                                    .map((item, index) => (
+                                    <li key={index} className="text-gray-700 mb-1">{item.replace('*', '').trim()}</li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="row-span-3 shadow-custom flex flex-col gap-3 justify-center items-center p-5 rounded-xl">
+                        <img className={`w-40 h-40 ${statusResult.loading && 'animate-spin'}`} src={statusResult.loading ? 'loading-b.png' : error ? '/warning.png' : 'layout.png'} alt="Layout" />
+                        <h2 className='text-lg font-semibold max-w-[500px] text-center'>
+                            {
+                                statusResult.loading ? (
+                                    <span>Please wait a moment for AI to analyze your image</span>
+                                ) : error ? (
+                                        <span className='text-red-400 font-bold'>{error.message}</span>
+                                    ) : (
+                                        <span>Upload an X-ray image to get instant AI-powered medical insights and recommendations</span>
+                                    )
+                                
+                            }
+                        </h2>
+                    </div>
+                )
+            }
             <div className="shadow-custom rounded-xl p-5">
                 <h2 className='font-bold text-xl mb-5'>AI-Powered Features</h2>
                 <div className="space-y-3">

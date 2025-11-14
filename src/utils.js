@@ -74,7 +74,7 @@ export const CURRENT_PROJECT = [
   },
   {
     name: 'Deteksi 4 penyakit Otak dan Paru - Paru',
-    desc: 'haha',
+    desc: 'Website ini merupakan platform analisis X-ray berbasis AI yang dapat mendeteksi kelainan pada X-ray dada dan otak secara cepat dan akurat. Dengan cukup mengunggah gambar, sistem akan menganalisis struktur penting dan memberikan hasil prediksi yang membantu proses evaluasi kesehatan awal.',
     techno: [
       'React JS',
       'Python',
